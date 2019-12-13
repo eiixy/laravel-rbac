@@ -4,7 +4,10 @@
 namespace Eiixy\Rbac\Models;
 
 
-class Permission
+use Illuminate\Database\Eloquent\Model;
+
+class Permission extends Model
 {
+    protected $table = 'rbac_permissions';
 
 }
