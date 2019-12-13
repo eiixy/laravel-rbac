@@ -6,8 +6,8 @@ namespace Eiixy\Rbac\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class RolePermissions extends Model
 {
-    protected $table = 'rbac_roles';
+    protected $table = 'rbac_role_permissions';
 
 }
