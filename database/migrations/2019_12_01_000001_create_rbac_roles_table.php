@@ -14,12 +14,10 @@ class CreateRbacRolesTable extends Migration
     public function up()
     {
         Schema::create('rbac_roles', function (Blueprint $table) {
-            $table->string('id', 100)->primary();
-            $table->bigInteger('user_id');
-            $table->unsignedInteger('client_id');
-            $table->text('scopes')->nullable();
-            $table->boolean('revoked');
-            $table->dateTime('expires_at')->nullable();
+            $table->increments('id');
+            $table->string('name')->comment('角色名称');
+            $table->string('description')->comment('角色描述');
+            $table->integer('sort')->default(50)->comment('排序');
         });
     }
 

@@ -1,8 +1,12 @@
 <?php
+
+
 namespace Eiixy\Rbac\Http\Controllers;
 
+use Eiixy\Rbac\Models\Permission;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Sczts\Skeleton\Http\Controllers\Controller;
+use Sczts\Skeleton\StatusCode;
 
 class PermissionController extends Controller
 {
@@ -12,12 +16,25 @@ class PermissionController extends Controller
      */
     public function list(Request $request)
     {
-
+        dd(2311);
     }
 
-    public function store(Request $request)
+    public function store()
     {
-        
+        $permission = $this->validate([
+            'pid' => 'nullable',
+            'name' => 'required',
+            'icon' => 'nullable',
+            'type' => 'nullable',
+            'url' => 'nullable',
+            'keyword' => 'nullable',
+            'sort' => 'nullable',
+        ]);
+        $result = Permission::query()->create($permission);
+        if ($result){
+            return $this->json(StatusCode::SUCCESS,['data'=>$result]);
+        }
+        return $this->json(StatusCode::ERROR,['result'=>$result]);
     }
 
     public function update($id,Request $request)

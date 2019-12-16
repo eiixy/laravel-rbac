@@ -10,4 +10,8 @@ class Role extends Model
 {
     protected $table = 'rbac_roles';
 
+    public function permissions()
+    {
+        return $this->hasManyThrough(Permission::class,'');
+    }
 }
