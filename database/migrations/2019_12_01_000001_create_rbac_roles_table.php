@@ -16,8 +16,9 @@ class CreateRbacRolesTable extends Migration
         Schema::create('rbac_roles', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->comment('角色名称');
-            $table->string('description')->comment('角色描述');
+            $table->string('description')->nullable()->comment('角色描述');
             $table->integer('sort')->default(50)->comment('排序');
+            $table->timestamps();
         });
     }
 

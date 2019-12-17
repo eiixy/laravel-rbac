@@ -1,6 +1,6 @@
 <?php
 
-namespace Sczts\Skeleton\Http\Middleware;
+namespace Eiixy\Rbac\Http\Middleware;
 
 use Closure;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -23,12 +23,7 @@ class JWTRoleAuth extends BaseMiddleware
             // 解析token角色
             $tokenRole = $this->auth->parseToken()->getClaim('role');
         } catch (JWTException $e) {
-            /**
-             * token解析失败，说明请求中没有可用的token。
-             * 为了可以全局使用（不需要token的请求也可通过），这里让请求继续。
-             * 因为这个中间件的责职只是校验token里的角色。
-             */
-            return $next($request);
+            throw new UnauthorizedHttpException('jwt-auth', 'User no role is specified');
         }
         // 判断token角色。
         if ($tokenRole != $role) {

@@ -2,11 +2,19 @@
 
 namespace Eiixy\Rbac\Providers;
 
+use Eiixy\Rbac\Http\Middleware\CheckPermission;
+use Eiixy\Rbac\Http\Middleware\JWTRoleAuth;
 use Illuminate\Support\ServiceProvider;
+
 
 
 class RbacServiceProvider extends ServiceProvider
 {
+    protected $middlewareAliases = [
+        'rbac.check' => CheckPermission::class,
+        'jwt.role' => JWTRoleAuth::class
+    ];
+
     public function boot()
     {
         // 发布配置文件
@@ -22,9 +30,12 @@ class RbacServiceProvider extends ServiceProvider
         // 加载数据库迁移文件
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
 
-
+        // 加载路由
         $this->loadRoutesFrom(__DIR__.'/../../routes/api.php');
-        //
+
+        // 加载中间件
+        $this->aliasMiddleware();
+
     }
 
 
@@ -36,5 +47,16 @@ class RbacServiceProvider extends ServiceProvider
                 $migrator->path($path);
             }
         });
+    }
+
+    protected function aliasMiddleware()
+    {
+        $router = $this->app['router'];
+
+        $method = method_exists($router, 'aliasMiddleware') ? 'aliasMiddleware' : 'middleware';
+
+        foreach ($this->middlewareAliases as $alias => $middleware) {
+            $router->$method($alias, $middleware);
+        }
     }
 }

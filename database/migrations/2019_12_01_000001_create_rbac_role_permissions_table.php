@@ -16,8 +16,7 @@ class CreateRbacRolePermissionsTable extends Migration
         Schema::create('rbac_role_permissions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('role_id')->comment('角色ID');
-            $table->string('permission_id')->comment('权限ID');
-            $table->timestamps();
+            $table->integer('permission_id')->comment('权限ID');
         });
     }
 

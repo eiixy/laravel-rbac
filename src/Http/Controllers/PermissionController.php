@@ -4,24 +4,22 @@
 namespace Eiixy\Rbac\Http\Controllers;
 
 use Eiixy\Rbac\Models\Permission;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 use Sczts\Skeleton\Http\Controllers\Controller;
-use Sczts\Skeleton\StatusCode;
+use Sczts\Skeleton\Traits\RestFul;
 
 class PermissionController extends Controller
 {
-    /**
-     * 权限列表
-     * @param Request $request
-     */
-    public function list(Request $request)
+    use RestFul;
+
+    protected function getModel(): Builder
     {
-        dd(2311);
+        return Permission::query();
     }
 
-    public function store()
+    protected function addRule(): array
     {
-        $permission = $this->validate([
+        return [
             'pid' => 'nullable',
             'name' => 'required',
             'icon' => 'nullable',
@@ -29,18 +27,19 @@ class PermissionController extends Controller
             'url' => 'nullable',
             'keyword' => 'nullable',
             'sort' => 'nullable',
-        ]);
-        $result = Permission::query()->create($permission);
-        if ($result){
-            return $this->json(StatusCode::SUCCESS,['data'=>$result]);
-        }
-        return $this->json(StatusCode::ERROR,['result'=>$result]);
+        ];
     }
 
-    public function update($id,Request $request)
+    protected function editRule(): array
     {
-        
+        return [
+            'pid' => 'nullable',
+            'name' => 'required',
+            'icon' => 'nullable',
+            'type' => 'nullable',
+            'url' => 'nullable',
+            'keyword' => 'nullable',
+            'sort' => 'nullable',
+        ];
     }
-
-
 }

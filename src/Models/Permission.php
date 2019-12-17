@@ -16,4 +16,8 @@ class Permission extends Model
 
     protected $guarded = [];
 
+    public function children()
+    {
+        return $this->hasMany(Permission::class,'pid');
+    }
 }
