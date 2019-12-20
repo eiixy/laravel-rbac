@@ -7,7 +7,6 @@ use Eiixy\Rbac\Http\Middleware\JWTRoleAuth;
 use Illuminate\Support\ServiceProvider;
 
 
-
 class RbacServiceProvider extends ServiceProvider
 {
     protected $middlewareAliases = [
@@ -39,7 +38,6 @@ class RbacServiceProvider extends ServiceProvider
     }
 
 
-
     protected function loadMigrationsFrom($paths)
     {
         $this->app->afterResolving('migrator', function ($migrator) use ($paths) {
@@ -52,7 +50,6 @@ class RbacServiceProvider extends ServiceProvider
     protected function aliasMiddleware()
     {
         $router = $this->app['router'];
-
         $method = method_exists($router, 'aliasMiddleware') ? 'aliasMiddleware' : 'middleware';
 
         foreach ($this->middlewareAliases as $alias => $middleware) {

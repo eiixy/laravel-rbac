@@ -2,6 +2,7 @@
 
 use Eiixy\Rbac\Models\Role;
 use Eiixy\Rbac\Models\User;
+use Eiixy\Rbac\Models\UserRole;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 
@@ -11,7 +12,7 @@ class RbacRoleSeeder extends Seeder
     public function run()
     {
         //
-        User::create([
+        $user = User::create([
             'username' => 'admin',
             'email' => 'admin@qq.com',
             'password' => \Illuminate\Support\Facades\Hash::make('123456'),
@@ -19,13 +20,17 @@ class RbacRoleSeeder extends Seeder
             'status' => User::STATUS_NORMAL,
         ]);
 
-        $data = $this->data();
-
-        foreach ($data as $item) {
+        $roles = $this->data();
+        foreach ($roles as $item) {
             $permissions = Arr::pull($item, 'permissions');
             $role = Role::create($item);
             $role->permissions()->attach($permissions);
         }
+
+        UserRole::query()->create([
+            'user_id' => $user->id,
+            'role_id' => 1
+        ]);
     }
 
     private function data()
