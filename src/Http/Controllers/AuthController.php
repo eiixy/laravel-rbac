@@ -21,10 +21,12 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
+        $user = auth('admin')->user();
         $permissions = auth('admin')->user()->permission();
 //        $menu = auth('admin')->user()->menu();
         return $this->json(StatusCode::SUCCESS,[
             'token' => $token,
+            'user' => $user,
             'permissions' => $permissions,
             'expires_in' => auth('admin')->factory()->getTTL() * 60
         ]);

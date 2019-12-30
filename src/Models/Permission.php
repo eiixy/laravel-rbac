@@ -20,4 +20,9 @@ class Permission extends Model
     {
         return $this->hasMany(Permission::class,'pid');
     }
+
+    public function scopeMenu($query)
+    {
+        return $query->whereIn('type', [Permission::TYPE_CATALOG, Permission::TYPE_PAGE]);
+    }
 }

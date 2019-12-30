@@ -42,7 +42,7 @@ class User extends Authenticatable implements JWTSubject
 
     public static function roles($user_id)
     {
-        return UserRole::query()->where('user_id',$user_id)->pluck('role_id')->toArray();
+        return UserRole::query()->where('user_id', $user_id)->pluck('role_id')->toArray();
     }
 
     public function permission()
@@ -50,7 +50,7 @@ class User extends Authenticatable implements JWTSubject
         $roles = static::roles($this->id);
         return [
             'permissions' => $this->permissions($roles),
-            'menu' => $this->menu($roles),
+            'menus' => $this->menus($roles),
         ];
     }
 
@@ -59,19 +59,19 @@ class User extends Authenticatable implements JWTSubject
      * @param $roles
      * @return array
      */
-    public function menu($roles)
+    public function menus($roles)
     {
-        $key = implode('-',$roles);
-        return Cache::remember('roles/'.$key.':menu', 60, function ()use($roles) {
-            $ids = RolePermissions::query()->whereIn('role_id', $roles)->pluck('permission_id');
-            $menu = Permission::with('children.children')
-                ->where('pid', 0)
-                ->whereIn('id', $ids)
-                ->whereIn('type', [Permission::TYPE_CATALOG, Permission::TYPE_PAGE])
-                ->get()->toArray();
-            return $menu;
-        });
-
+        $ids = RolePermissions::query()->whereIn('role_id', $roles)->pluck('permission_id');
+        $menus = Permission::with(['children' => function ($query) {
+            return $query->with(['children' => function ($query) {
+                return $query->menu();
+            }])->menu();
+        }])
+            ->where('pid', 0)
+            ->whereIn('id', $ids)
+            ->menu()
+            ->get()->toArray();
+        return $menus;
     }
 
     /**
@@ -81,8 +81,8 @@ class User extends Authenticatable implements JWTSubject
      */
     public function permissions($roles)
     {
-        $key = implode('-',$roles);
-        return Cache::remember('roles/'.$key.':permission', 60, function ()use($roles) {
+//        $key = implode('-', $roles);
+//        return Cache::remember('roles/' . $key . ':permission', 60, function () use ($roles) {
             $ids = RolePermissions::query()->whereIn('role_id', $roles)->pluck('permission_id');
             $permissions = Permission::query()->whereIn('id', $ids)->pluck('keyword')->map(function ($keyword) {
                 if ($keyword) {
@@ -90,13 +90,13 @@ class User extends Authenticatable implements JWTSubject
                 }
             })->collapse()->toArray();
             return $permissions;
-        });
+//        });
     }
 
     public function hasPermission($permission)
     {
         $roles = static::roles($this->id);
         $permissions = static::permissions($roles);
-        return in_array($permission,$permissions);
+        return in_array($permission, $permissions);
     }
 }

@@ -17,6 +17,7 @@ class CreateRbacUserRolesTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->comment('用户ID');
             $table->integer('role_id')->comment('角色ID');
+            $table->string('type')->comment('用户类型');
         });
     }
 
