@@ -13,21 +13,18 @@ class AuthController extends Controller
         $this->middleware('auth:admin', ['except' => ['login']]);
     }
 
-
     public function login()
     {
         $credentials = request(['email', 'password']);
         if (!$token = auth('admin')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return $this->json(StatusCode::LOGIN_FAILED,[],200);
         }
 
         $user = auth('admin')->user();
-        $permissions = auth('admin')->user()->permission();
-//        $menu = auth('admin')->user()->menu();
         return $this->json(StatusCode::SUCCESS,[
             'token' => $token,
             'user' => $user,
-            'permissions' => $permissions,
+            'permissions' => $user->permission(),
             'expires_in' => auth('admin')->factory()->getTTL() * 60
         ]);
     }
@@ -40,16 +37,11 @@ class AuthController extends Controller
 
     public function refresh()
     {
+        $user = auth('admin')->user();
         return $this->json(StatusCode::SUCCESS,[
             'token' => auth('admin')->refresh(),
-            'expires_in' => auth('admin')->factory()->getTTL() * 60
-        ]);
-    }
-
-    protected function respondWithToken($token)
-    {
-        return $this->json(StatusCode::SUCCESS,[
-            'token' => $token,
+            'user' => $user,
+            'permissions' => $user->permission(),
             'expires_in' => auth('admin')->factory()->getTTL() * 60
         ]);
     }

@@ -1,10 +1,9 @@
 <?php
 
-Route::group(['prefix'=>'api','middleware'=> ['api'],'namespace'=> 'Eiixy\Rbac\Http\Controllers'],function (){
-
+Route::group(['prefix'=>'api/rbac','middleware'=> ['api'],'namespace'=> 'Eiixy\Rbac\Http\Controllers'],function (){
     Route::post('login', 'AuthController@login');
     Route::get('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
+    Route::get('refresh', 'AuthController@refresh');
 
     // 权限管理
     Route::group(['prefix'=>'permission','middleware'=>['jwt.role:admin']],function (){
