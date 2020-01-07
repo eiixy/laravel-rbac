@@ -5,7 +5,9 @@ namespace Eiixy\Rbac\Http\Controllers;
 
 use Eiixy\Rbac\Models\Permission;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Sczts\Skeleton\Http\Controllers\Controller;
+use Sczts\Skeleton\Http\StatusCode;
 use Sczts\Skeleton\Traits\RestFul;
 
 class PermissionController extends Controller
@@ -15,6 +17,13 @@ class PermissionController extends Controller
     protected function getModel(): Builder
     {
         return Permission::query();
+    }
+
+    public function list(Request $request)
+    {
+        $query = static::filter($this->getModel(), $request)->withCount('children');
+        $data = $query->get();
+        return $this->json(StatusCode::SUCCESS, ['data' => $data]);
     }
 
     protected function addRule(): array
