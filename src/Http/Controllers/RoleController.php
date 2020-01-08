@@ -38,8 +38,9 @@ class RoleController extends Controller
     {
         $data = $this->validate($this->editRule());
         $permissions = Arr::pull($data, 'permissions');
-        $role = $this->getModel()->findOrFail($id)->update($data);
-        if ($role) {
+        $role = $this->getModel()->findOrFail($id);
+        $role->update($data);
+        if ($role && $role->update($data)) {
             $role->permissions()->detach();
             $role->permissions()->attach($permissions);
             return $this->json(StatusCode::SUCCESS);

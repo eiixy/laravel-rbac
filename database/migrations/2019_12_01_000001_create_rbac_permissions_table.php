@@ -22,7 +22,7 @@ class CreateRbacPermissionsTable extends Migration
             $table->tinyInteger('type')->default(Permission::TYPE_CATALOG)->comment('权限类型');
             $table->string('url')->nullable()->comment('菜单url');
             $table->string('keyword')->nullable()->comment('权限标识');
-            $table->integer('sort')->default(50)->comment('排序');
+            $table->integer('sort')->default(1000)->comment('排序');
             $table->timestamps();
         });
     }

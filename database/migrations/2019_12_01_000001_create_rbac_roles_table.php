@@ -17,7 +17,7 @@ class CreateRbacRolesTable extends Migration
             $table->increments('id');
             $table->string('name')->comment('角色名称');
             $table->string('description')->nullable()->comment('角色描述');
-            $table->integer('sort')->default(50)->comment('排序');
+            $table->integer('sort')->default(1000)->comment('排序');
             $table->timestamps();
         });
     }

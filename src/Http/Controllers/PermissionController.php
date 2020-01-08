@@ -21,8 +21,14 @@ class PermissionController extends Controller
 
     public function list(Request $request)
     {
-        $query = static::filter($this->getModel(), $request)->withCount('children');
+        $query = static::filter($this->getModel(), $request)->with('children')->withCount('children');
         $data = $query->get();
+        return $this->json(StatusCode::SUCCESS, ['data' => $data]);
+    }
+
+    public function all()
+    {
+        $data = $this->getModel()->where('pid',0)->with('children.children')->get();
         return $this->json(StatusCode::SUCCESS, ['data' => $data]);
     }
 

@@ -15,6 +15,7 @@ class RbacRoleSeeder extends Seeder
         $user = User::create([
             'username' => 'admin',
             'email' => 'admin@qq.com',
+            'avatar' => 'https://cdn.51zts.com/FnnisPEhU7czoQWy4qh1PwKXP0iM.jpg',
             'password' => \Illuminate\Support\Facades\Hash::make('123456'),
             'type' => User::TYPE_SUPER_ADMIN,
             'status' => User::STATUS_NORMAL,
