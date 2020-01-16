@@ -21,5 +21,6 @@ Route::group(['prefix'=>'api/rbac','middleware'=> ['api'],'namespace'=> 'Eiixy\R
         Route::get('/{id}', 'RoleController@show')->middleware('rbac.check:sys_role.show');
         Route::put('/{id}', 'RoleController@update')->middleware('rbac.check:sys_role.update');
         Route::delete('/{id}', 'RoleController@destroy')->middleware('rbac.check:sys_role.delete');
+
     });
 });
