@@ -22,6 +22,6 @@ class Role extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, UserRole::class, 'role_id', 'user_id');
+        return $this->belongsToMany(config('rbac.users'), UserRole::class, 'role_id', 'user_id');
     }
 }
