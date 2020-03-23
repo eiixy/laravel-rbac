@@ -1,6 +1,8 @@
 <?php
 
 Route::group(['prefix'=>'api/rbac','middleware'=> ['api'],'namespace'=> 'Eiixy\Rbac\Http\Controllers'],function (){
+    Route::get('/routes', 'CommonController@routes');
+
     // 权限管理
     Route::group(['prefix'=>'permission','middleware'=>['jwt.role:'.config('rbac.guard')]],function (){
         Route::get('/', 'PermissionController@list')->middleware('rbac.check:sys_permission.list');
