@@ -39,17 +39,17 @@ class RbacPermissionSeeder extends Seeder
                         'children' => [
                             [
                                 'name' => '添加角色',
-                                'type' => Permission::TYPE_BUTTON,
+                                'type' => Permission::TYPE_ELEMENT,
                                 'keyword' => 'sys_role.add'
                             ],
                             [
                                 'name' => '编辑角色',
-                                'type' => Permission::TYPE_BUTTON,
+                                'type' => Permission::TYPE_ELEMENT,
                                 'keyword' => 'sys_role.update'
                             ],
                             [
                                 'name' => '删除角色',
-                                'type' => Permission::TYPE_BUTTON,
+                                'type' => Permission::TYPE_ELEMENT,
                                 'keyword' => 'sys_role.delete'
                             ],
                         ]
@@ -62,17 +62,17 @@ class RbacPermissionSeeder extends Seeder
                         'children' => [
                             [
                                 'name' => '添加权限',
-                                'type' => Permission::TYPE_BUTTON,
+                                'type' => Permission::TYPE_ELEMENT,
                                 'keyword' => 'sys_permission.add'
                             ],
                             [
                                 'name' => '编辑权限',
-                                'type' => Permission::TYPE_BUTTON,
+                                'type' => Permission::TYPE_ELEMENT,
                                 'keyword' => 'sys_permission.update'
                             ],
                             [
                                 'name' => '删除权限',
-                                'type' => Permission::TYPE_BUTTON,
+                                'type' => Permission::TYPE_ELEMENT,
                                 'keyword' => 'sys_permission.delete'
                             ],
                         ]

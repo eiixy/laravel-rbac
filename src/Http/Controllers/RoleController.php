@@ -8,8 +8,9 @@ use Eiixy\Rbac\Models\RolePermissions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Sczts\Skeleton\Http\Controllers\Controller;
-use Sczts\Skeleton\Http\StatusCode;
 use Sczts\Skeleton\Traits\RestFul;
+use Sczts\Skeleton\Http\StatusCode;
+
 
 class RoleController extends Controller
 {
@@ -24,7 +25,7 @@ class RoleController extends Controller
 
     public function store()
     {
-        $data = $this->validate($this->addRule());
+        $data = $this->validator($this->addRule());
         $permissions = Arr::pull($data, 'permissions');
         $role = $this->getModel()->create($data);
         if ($role) {
@@ -36,7 +37,7 @@ class RoleController extends Controller
 
     public function update($id)
     {
-        $data = $this->validate($this->editRule());
+        $data = $this->validator($this->editRule());
         $permissions = Arr::pull($data, 'permissions');
         $role = $this->getModel()->findOrFail($id);
         $role->update($data);

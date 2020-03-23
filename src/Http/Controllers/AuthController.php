@@ -6,43 +6,46 @@ namespace Eiixy\Rbac\Http\Controllers;
 use Sczts\Skeleton\Http\Controllers\Controller;
 use Sczts\Skeleton\Http\StatusCode;
 
-class AuthController extends Controller
+abstract class AuthController extends Controller
 {
+    protected $guard;
+
     public function __construct()
     {
-        $this->middleware('auth:admin', ['except' => ['login']]);
+        $this->guard = config('rbac.guard');
+        $this->middleware('auth:'.$this->guard, ['except' => ['login']]);
     }
 
     public function login()
     {
         $credentials = request(['email', 'password']);
-        if (!$token = auth('admin')->attempt($credentials)) {
-            return $this->json(StatusCode::LOGIN_FAILED,[],200);
+        if (!$token = auth($this->guard)->attempt($credentials)) {
+            return $this->json(StatusCode::LOGIN_FAILED, [], 200);
         }
 
-        $user = auth('admin')->user();
-        return $this->json(StatusCode::SUCCESS,[
+        $user = auth($this->guard)->user();
+        return $this->json(StatusCode::SUCCESS, [
             'token' => $token,
             'user' => $user,
             'permissions' => $user->permission(),
-            'expires_in' => auth('admin')->factory()->getTTL() * 60
+            'expires_in' => auth($this->guard)->factory()->getTTL() * 60
         ]);
     }
 
     public function logout()
     {
-        auth('admin')->logout();
+        auth($this->guard)->logout();
         return $this->json(StatusCode::SUCCESS, ['msg' => '退出登录成功']);
     }
 
     public function refresh()
     {
-        $user = auth('admin')->user();
-        return $this->json(StatusCode::SUCCESS,[
-            'token' => auth('admin')->refresh(),
+        $user = auth($this->guard)->user();
+        return $this->json(StatusCode::SUCCESS, [
+            'token' => auth($this->guard)->refresh(),
             'user' => $user,
             'permissions' => $user->permission(),
-            'expires_in' => auth('admin')->factory()->getTTL() * 60
+            'expires_in' => auth($this->guard)->factory()->getTTL() * 60
         ]);
     }
 }

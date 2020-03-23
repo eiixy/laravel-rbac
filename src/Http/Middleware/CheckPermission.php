@@ -9,6 +9,7 @@ use Sczts\Skeleton\Http\StatusCode;
 
 class CheckPermission
 {
+//    abstract function getUser();
     /**
      * 检查用户权限
      *
@@ -19,7 +20,8 @@ class CheckPermission
      */
     public function handle($request, Closure $next, $permission)
     {
-        $user = auth('admin')->user();
+        $guard = config('rbac.guard');
+        $user = auth($guard)->user();
         if ($user == null) {
             return response()->json(StatusCode::ERROR, 401);
         }

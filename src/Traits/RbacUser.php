@@ -1,4 +1,5 @@
 <?php
+
 namespace Eiixy\Rbac\Traits;
 
 use Eiixy\Rbac\Models\Permission;
@@ -21,11 +22,6 @@ trait RbacUser
         ];
     }
 
-    public function info()
-    {
-        return $this->hasOne(config('rbac.users'),'id','id');
-    }
-
     /**
      * 获取菜单(最大三级)
      * @param $roles
@@ -34,14 +30,14 @@ trait RbacUser
     public static function menus($roles)
     {
         $ids = RolePermissions::query()->whereIn('role_id', $roles)->pluck('permission_id');
-        $menus = Permission::with(['children' => function ($query) {
-            return $query->with(['children' => function ($query) {
-                return $query->menu();
-            }])->menu();
+        $menus = Permission::with(['children' => function ($query) use ($ids) {
+            return $query->with(['children' => function ($query) use ($ids) {
+                return $query->isMenu()->inRoles($ids);
+            }])->isMenu()->inRoles($ids);
         }])
             ->where('pid', 0)
-            ->whereIn('id', $ids)
-            ->menu()
+            ->inRoles($ids)
+            ->isMenu()
             ->get()->toArray();
         return $menus;
     }
@@ -62,6 +58,11 @@ trait RbacUser
         return $permissions;
     }
 
+    /**
+     * 判断是否拥有权限
+     * @param $permission
+     * @return bool
+     */
     public function hasPermission($permission)
     {
         $roles = static::roles($this->id);

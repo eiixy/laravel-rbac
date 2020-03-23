@@ -1,4 +1,6 @@
 <?php
+
 return [
-    'users' => App\Models\User::class,
+    'guard' => 'api',
+    'model' => \App\Models\User::class
 ];

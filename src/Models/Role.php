@@ -22,6 +22,15 @@ class Role extends Model
 
     public function users()
     {
-        return $this->belongsToMany(config('rbac.users'), UserRole::class, 'role_id', 'user_id');
+        return $this->belongsToMany(config('rbac.model'), UserRole::class, 'role_id', 'user_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        // 删除前清除所有用户下的此角色
+        static::deleting(function (Role $role){
+            UserRole::query()->where('role_id',$role->id)->delete();
+        });
     }
 }
