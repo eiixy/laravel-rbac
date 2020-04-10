@@ -3,19 +3,25 @@
 namespace Eiixy\Rbac\Traits;
 
 use Eiixy\Rbac\Models\Permission;
+use Eiixy\Rbac\Models\Role;
 use Eiixy\Rbac\Models\RolePermissions;
 use Eiixy\Rbac\Models\UserRole;
 
 trait RbacUser
 {
-    public static function roles($user_id)
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class,UserRole::class,'user_id','role_id');
+    }
+
+    public static function getRoles($user_id)
     {
         return UserRole::query()->where('user_id', $user_id)->pluck('role_id')->toArray();
     }
 
     public function permission()
     {
-        $roles = static::roles($this->id);
+        $roles = static::getRoles($this->id);
         return [
             'permissions' => $this->permissions($roles),
             'menus' => $this->menus($roles),
@@ -65,7 +71,7 @@ trait RbacUser
      */
     public function hasPermission($permission)
     {
-        $roles = static::roles($this->id);
+        $roles = static::getRoles($this->id);
         $permissions = static::permissions($roles);
         return in_array($permission, $permissions);
     }
