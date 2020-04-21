@@ -28,7 +28,7 @@ class PermissionController extends Controller
 
     public function all()
     {
-        $data = $this->getModel()->where('pid',0)->with('children.children')->get();
+        $data = $this->getModel()->where('pid',0)->with('children.children.children')->get();
         return $this->json(StatusCode::SUCCESS, ['data' => $data]);
     }
 
