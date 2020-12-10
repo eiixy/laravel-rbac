@@ -18,7 +18,7 @@ class RbacServiceProvider extends ServiceProvider
         // 发布配置文件
         $config_path = realpath(__DIR__.'/../../config/rbac.php');
         $this->publishes([
-            $config_path => database_path('config/rbac.php'),
+            $config_path => config_path('rbac.php'),
         ], 'rbac-config');
 
         $this->publishes([
