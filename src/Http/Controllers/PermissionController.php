@@ -1,13 +1,11 @@
 <?php
 
 
-namespace Eiixy\Rbac\Http\Controllers;
+namespace Sczts\Rbac\Http\Controllers;
 
-use Eiixy\Rbac\Models\Permission;
+use Sczts\Rbac\Models\Permission;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
-use Sczts\Skeleton\Http\Controllers\Controller;
-use Sczts\Skeleton\Http\StatusCode;
+use Illuminate\Routing\Controller;
 use Sczts\Skeleton\Traits\RestFul;
 
 class PermissionController extends Controller
@@ -19,17 +17,11 @@ class PermissionController extends Controller
         return Permission::query();
     }
 
-    public function list(Request $request)
-    {
-        $query = static::filter($this->getModel(), $request)->with('children')->withCount('children');
-        $data = $query->get();
-        return $this->json(StatusCode::SUCCESS, ['data' => $data]);
-    }
-
     public function all()
     {
-        $data = $this->getModel()->where('pid',0)->with('children.children.children')->get();
-        return $this->json(StatusCode::SUCCESS, ['data' => $data]);
+        $data = Permission::query()->get();
+        $data = Permission::makeTree($data);
+        return $this->success($data);
     }
 
     protected function addRule(): array

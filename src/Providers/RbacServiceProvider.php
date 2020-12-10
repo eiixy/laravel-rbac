@@ -1,9 +1,9 @@
 <?php
 
-namespace Eiixy\Rbac\Providers;
+namespace Sczts\Rbac\Providers;
 
-use Eiixy\Rbac\Http\Middleware\CheckPermission;
-use Eiixy\Rbac\Http\Middleware\JWTRoleAuth;
+use Sczts\Rbac\Http\Middleware\CheckPermission;
+use Sczts\Rbac\Http\Middleware\JWTRoleAuth;
 use Illuminate\Support\ServiceProvider;
 
 
@@ -11,7 +11,6 @@ class RbacServiceProvider extends ServiceProvider
 {
     protected $middlewareAliases = [
         'rbac.check' => CheckPermission::class,
-        'jwt.role' => JWTRoleAuth::class
     ];
 
     public function boot()

@@ -1,15 +1,15 @@
 <?php
 
 
-namespace Eiixy\Rbac\Http\Controllers;
+namespace Sczts\Rbac\Http\Controllers;
 
-use Eiixy\Rbac\Models\Role;
-use Eiixy\Rbac\Models\RolePermissions;
+use Sczts\Rbac\Models\Role;
+use Sczts\Rbac\Models\RolePermissions;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Sczts\Skeleton\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Sczts\Skeleton\Traits\RestFul;
-use Sczts\Skeleton\Http\StatusCode;
 
 
 class RoleController extends Controller
@@ -19,13 +19,13 @@ class RoleController extends Controller
     public function show($id)
     {
         $data = $this->getModel()->findOrFail($id);
-        $data->permissions = RolePermissions::where('role_id',$id)->pluck('permission_id');
-        return $this->json(StatusCode::SUCCESS, ['data' => $data]);
+        $data->permissions = RolePermissions::query()->where('role_id', $id)->pluck('permission_id');
+        return $this->success($data);
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        $data = $this->validator($this->addRule());
+        $data = $request->validate($this->addRule());
         $permissions = Arr::pull($data, 'permissions');
         $role = $this->getModel()->create($data);
         if ($role) {
@@ -35,9 +35,9 @@ class RoleController extends Controller
         return $this->json(StatusCode::ERROR);
     }
 
-    public function update($id)
+    public function update($id, Request $request)
     {
-        $data = $this->validator($this->editRule());
+        $data = $request->validate($this->editRule());
         $permissions = Arr::pull($data, 'permissions');
         $role = $this->getModel()->findOrFail($id);
         $role->update($data);
@@ -46,7 +46,7 @@ class RoleController extends Controller
             $role->permissions()->attach($permissions);
             return $this->json(StatusCode::SUCCESS);
         }
-        return $this->json(StatusCode::ERROR);
+        return $this->failed();
     }
 
     protected function getModel(): Builder

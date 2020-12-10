@@ -1,33 +1,36 @@
 <?php
 
 
-namespace Eiixy\Rbac\Http\Controllers;
+namespace Sczts\Rbac\Http\Controllers;
 
-use Sczts\Skeleton\Http\Controllers\Controller;
-use Sczts\Skeleton\Http\StatusCode;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Sczts\Skeleton\Traits\JsonResponse;
 
 abstract class AuthController extends Controller
 {
+    use JsonResponse;
+
     protected $guard;
 
     public function __construct()
     {
         $this->guard = config('rbac.guard');
-        $this->middleware('auth:'.$this->guard, ['except' => ['login']]);
+        $this->middleware(config('rbac.middleware'), ['except' => ['login']]);
     }
 
-    public function login()
+    public function login(Request $request)
     {
-        $credentials = request(['email', 'password']);
+        $credentials = $request->input(['email', 'password']);
         if (!$token = auth($this->guard)->attempt($credentials)) {
-            return $this->json(StatusCode::LOGIN_FAILED, [], 200);
+            return $this->failed('登录认证失败');
         }
 
         $user = auth($this->guard)->user();
-        return $this->json(StatusCode::SUCCESS, [
+        return $this->success([
             'token' => $token,
             'user' => $user,
-            'permissions' => $user->permission(),
+            'permissions' => $user->permissions(),
             'expires_in' => auth($this->guard)->factory()->getTTL() * 60
         ]);
     }
@@ -35,13 +38,13 @@ abstract class AuthController extends Controller
     public function logout()
     {
         auth($this->guard)->logout();
-        return $this->json(StatusCode::SUCCESS, ['msg' => '退出登录成功']);
+        return $this->message('退出登录成功');
     }
 
     public function refresh()
     {
         $user = auth($this->guard)->user();
-        return $this->json(StatusCode::SUCCESS, [
+        return $this->success([
             'token' => auth($this->guard)->refresh(),
             'user' => $user,
             'permissions' => $user->permission(),

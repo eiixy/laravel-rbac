@@ -1,31 +1,17 @@
 <?php
 
-use Eiixy\Rbac\Models\Permission;
+use Sczts\Rbac\Models\Permission;
+use Sczts\Skeleton\Traits\SeederTrait;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
 
 
 class RbacPermissionSeeder extends Seeder
 {
+    use SeederTrait;
     public function run()
     {
-        //
-        $data = $this->data();
-        $this->create(Permission::query(),$data);
+        $this->recursiveCreate(Permission::query(),$this->data());
     }
-
-    public function create($model,$data,$pid=0)
-    {
-        foreach ($data as $item){
-            $children = Arr::pull($item,'children');
-            $item['pid'] = $pid;
-            $parent = $model->create($item);
-            if (!empty($children)){
-                $this->create($model,$children,$parent->id);
-            }
-        }
-    }
-
     private function data(){
         return [
             [

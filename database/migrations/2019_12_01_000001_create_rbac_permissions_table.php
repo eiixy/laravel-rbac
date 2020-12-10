@@ -1,6 +1,6 @@
 <?php
 
-use Eiixy\Rbac\Models\Permission;
+use Sczts\Rbac\Models\Permission;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -23,6 +23,7 @@ class CreateRbacPermissionsTable extends Migration
             $table->string('url')->nullable()->comment('菜单url');
             $table->string('keyword')->nullable()->comment('权限标识');
             $table->integer('sort')->default(1000)->comment('排序');
+            $table->string('guard')->nullable()->comment('看守器');
             $table->timestamps();
         });
     }

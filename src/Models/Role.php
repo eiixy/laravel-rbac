@@ -1,15 +1,13 @@
 <?php
 
 
-namespace Eiixy\Rbac\Models;
+namespace Sczts\Rbac\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
-use Sczts\Skeleton\Traits\Models\Random;
 
 class Role extends Model
 {
-    use Random;
 
     protected $table = 'rbac_roles';
 

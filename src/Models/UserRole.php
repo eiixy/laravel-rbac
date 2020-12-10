@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Eiixy\Rbac\Models;
+namespace Sczts\Rbac\Models;
 
 
 use Illuminate\Database\Eloquent\Model;

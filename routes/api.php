@@ -1,10 +1,8 @@
 <?php
 
-Route::group(['prefix'=>'api/rbac','middleware'=> ['api'],'namespace'=> 'Eiixy\Rbac\Http\Controllers'],function (){
-    Route::get('/routes', 'CommonController@routes');
-
+Route::group(['prefix' => 'api/rbac', 'middleware' => ['api'], 'namespace' => 'Sczts\Rbac\Http\Controllers'], function () {
     // 权限管理
-    Route::group(['prefix'=>'permission','middleware'=>['jwt.role:'.config('rbac.guard')]],function (){
+    Route::group(['prefix' => 'permission', 'middleware' => config('rbac.auth.middleware')], function () {
         Route::get('/', 'PermissionController@list')->middleware('rbac.check:sys_permission.list');
         Route::get('/all', 'PermissionController@all')->middleware('rbac.check:sys_permission.all');
         Route::post('/', 'PermissionController@store')->middleware('rbac.check:sys_permission.add');
@@ -13,7 +11,7 @@ Route::group(['prefix'=>'api/rbac','middleware'=> ['api'],'namespace'=> 'Eiixy\R
         Route::delete('/{id}', 'PermissionController@destroy')->middleware('rbac.check:sys_permission.delete');
     });
     // 角色管理
-    Route::group(['prefix'=>'role','middleware'=>['jwt.role:'.config('rbac.guard')]],function (){
+    Route::group(['prefix' => 'role', 'middleware' => config('rbac.auth.middleware')], function () {
         Route::get('/', 'RoleController@list')->middleware('rbac.check:sys_role.list');
         Route::post('/', 'RoleController@store')->middleware('rbac.check:sys_role.add');
         Route::get('/{id}', 'RoleController@show')->middleware('rbac.check:sys_role.show');

@@ -2,5 +2,8 @@
 
 return [
     'guard' => 'api',
-    'model' => \App\Models\User::class
+    'middleware' => [
+        'jwt.auth',
+        'auth.api'
+    ]
 ];
