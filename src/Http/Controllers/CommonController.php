@@ -1,6 +1,7 @@
 <?php
 
-namespace Eiixy\Rbac\Http\Controllers;
+
+namespace Sczts\Rbac\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
