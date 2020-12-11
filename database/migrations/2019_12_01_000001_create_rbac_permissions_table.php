@@ -23,7 +23,6 @@ class CreateRbacPermissionsTable extends Migration
             $table->string('url')->nullable()->comment('菜单url');
             $table->string('keyword')->nullable()->comment('权限标识');
             $table->integer('sort')->default(1000)->comment('排序');
-            $table->string('guard')->nullable()->comment('看守器');
             $table->timestamps();
         });
     }

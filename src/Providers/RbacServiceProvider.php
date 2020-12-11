@@ -3,7 +3,6 @@
 namespace Sczts\Rbac\Providers;
 
 use Sczts\Rbac\Http\Middleware\CheckPermission;
-use Sczts\Rbac\Http\Middleware\JWTRoleAuth;
 use Illuminate\Support\ServiceProvider;
 
 

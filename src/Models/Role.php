@@ -20,7 +20,7 @@ class Role extends Model
 
     public function users()
     {
-        return $this->belongsToMany(config('rbac.model'), UserRole::class, 'role_id', 'user_id');
+        return $this->belongsToMany(config('rbac.user'), UserRole::class, 'role_id', 'user_id');
     }
 
     protected static function boot()

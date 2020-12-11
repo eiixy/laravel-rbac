@@ -5,6 +5,7 @@ namespace Sczts\Rbac\Http\Middleware;
 
 
 use Closure;
+use Illuminate\Support\Facades\Auth;
 use Sczts\Skeleton\Http\StatusCode;
 
 class CheckPermission
@@ -18,8 +19,7 @@ class CheckPermission
      */
     public function handle($request, Closure $next, $permission)
     {
-        $guard = config('rbac.guard');
-        $user = auth($guard)->user();
+        $user = Auth::user();
         if ($user == null) {
             return response()->json(['msg' => '用户未登录'], 401);
         }

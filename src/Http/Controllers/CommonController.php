@@ -2,15 +2,15 @@
 
 namespace Eiixy\Rbac\Http\Controllers;
 
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Sczts\Skeleton\Http\StatusCode;
-use Sczts\Skeleton\Http\Controllers\Controller;
+use Sczts\Skeleton\Traits\JsonResponse;
 
 class CommonController extends Controller
 {
+    use JsonResponse;
+
     //
     public function routes()
     {
@@ -31,6 +31,6 @@ class CommonController extends Controller
                 }
             }
         }
-        return $this->json(StatusCode::SUCCESS, ['data' => $list]);
+        return $this->success($list);
     }
 }

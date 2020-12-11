@@ -15,8 +15,31 @@ trait UserPermission
      * 角色权限缓存时间
      * @return int
      */
-    private function ttl(){
-        return 43200;
+    private function ttl()
+    {
+        return config('rbac.cache_ttl', 43200);
+    }
+
+    /**
+     * 获取角色缓存键名
+     * @param $role_id
+     * @return string
+     */
+    private function getRoleCacheKey($role_id)
+    {
+        return 'role_cache_keys:' . $role_id;
+    }
+
+    /**
+     * 获取权限缓存键名
+     * @param $roles
+     * @param $type
+     * @return string
+     */
+    private function getPermissionCacheKey($roles, $type)
+    {
+        sort($roles);
+        return 'role_permission_' . $type . ':' . implode('_', $roles);
     }
 
     public function roles()
@@ -35,15 +58,16 @@ trait UserPermission
 
     /**
      * 获取角色下包含的页面菜单权限
+     * @param $roles
+     * @return mixed
      */
     public function permissionMenus($roles)
     {
-        sort($roles);
-        $cache_key = 'role_permission_menus:' . implode('_', $roles);
-        
+        $cache_key = $this->getPermissionCacheKey($roles, 'menus');
+
         return Cache::remember($cache_key, $this->ttl(), function () use ($roles, $cache_key) {
-            foreach ($roles as $role) {
-                Redis::sadd('role_cache_keys:' . $role, $cache_key);
+            foreach ($roles as $role_id) {
+                Redis::sadd($this->getRoleCacheKey($role_id), $cache_key);
             }
             $permissions = RolePermissions::query()->whereIn('role_id', $roles)->pluck('permission_id');
             $menus = Permission::query()->isMenu()->whereIn('id', $permissions)->get();
@@ -59,11 +83,11 @@ trait UserPermission
      */
     public function permissionKeywords($roles)
     {
-        sort($roles);
-        $cache_key = 'role_permission_keywords:' . implode('_', $roles);
+        $cache_key = $this->getPermissionCacheKey($roles, 'keywords');
+
         return Cache::remember($cache_key, $this->ttl(), function () use ($roles, $cache_key) {
-            foreach ($roles as $role) {
-                Redis::sadd('role_cache_keys:' . $role, $cache_key);
+            foreach ($roles as $role_id) {
+                Redis::sadd($this->getRoleCacheKey($role_id), $cache_key);
             }
             $permissions = RolePermissions::query()->whereIn('role_id', $roles)->pluck('permission_id');
             $keywords = Permission::query()->whereIn('id', $permissions)->whereNotNull('keyword')->pluck('keyword')->map(function ($keyword) {

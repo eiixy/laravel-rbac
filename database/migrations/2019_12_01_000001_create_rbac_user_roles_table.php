@@ -14,10 +14,8 @@ class CreateRbacUserRolesTable extends Migration
     public function up()
     {
         Schema::create('rbac_user_roles', function (Blueprint $table) {
-            $table->increments('id');
             $table->integer('user_id')->comment('用户ID');
             $table->integer('role_id')->comment('角色ID');
-            $table->string('guard')->nullable()->comment('看守器');
         });
     }
 
