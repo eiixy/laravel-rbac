@@ -10,6 +10,7 @@ return [
      * 权限中间件
      */
     'middleware' => [
+        'api',
 //        'jwt.auth',
 //        'auth.api',
 //        'auth:sanctum',

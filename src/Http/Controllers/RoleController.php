@@ -11,7 +11,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Routing\Controller;
 use Sczts\Skeleton\Traits\RestFul;
 
-
 class RoleController extends Controller
 {
     use RestFul;
